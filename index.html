@@ -7,10 +7,12 @@
       var ctx = document.getElementById('canvas').getContext('2d'); 
       if (window.innerHeight > window.innerWidth){ //手機螢幕
           ctx.canvas.width  = window.innerWidth;
-          ctx.canvas.height = window.innerWidth+100;        
+          ctx.canvas.height = window.innerWidth+100;  
+          
       }else{ //電腦螢幕
           ctx.canvas.width  = window.innerWidth-150;
-          ctx.canvas.height = window.innerHeight-150;        
+          ctx.canvas.height = window.innerHeight-150; 
+
       }      
       init();
    }
@@ -182,7 +184,7 @@ function choose(ev) {//在桌面上单击时调用
               matched = false;
             }
             firstpick = true;
-            tid = setTimeout(flipback,1000);//翻开的二张牌不配对时，给玩家一点时间，然后盖住牌
+            tid = setTimeout(flipback,800);//翻开的二张牌不配对时，给玩家一点时间，然后盖住牌
         }
      }
 }
@@ -229,6 +231,7 @@ function init(){
   #game{
     position:relative;
   }
+
   </style>
  </head>
 <body >
@@ -240,13 +243,14 @@ function init(){
   <div id="game"  >
     <div id="gameUI">
       <div id="gameIntro">
-        <p style="font-size: large">玩法：點擊桌面上的兩張牌，找出所有配對的牌.</p>
+        <p >玩法：點擊桌面上的兩張牌，找出所有配對的牌.</p>
       </div>
 
       <div id="gameStats">
-        <p><span id="gameScore" style="font-size: large">已找到配對：0</span> 對</p>
+        <p><span id="gameScore" >已找到配對：0</span> 對 <button id="reButton" onclick="myFunction()" >Reload page</button></p>
+
       </div>
-      <button onclick="myFunction()" style="font-size: large">Reload page</button>
+      
 
       <script>
       function myFunction() {
@@ -256,9 +260,29 @@ function init(){
 
       <div id="gameComplete">
         <h1>遊戲結束!</h1>
-        <p><span id="gameScore1"></span> </p>
+        <p><span id="gameScore1" ></span> </p>
         <p><a id="gameReset" onclick="init();" href="" style="font-size: large">再玩一次</a></p>
       </div>
+
+      <script type="text/javascript">
+      wh = window.innerHeight
+      ww = window.innerWidth
+      if (wh > ww){ //手機螢幕
+        pixwidth  = Math.floor((ww-50)/4)+1;
+        document.getElementById("gameScore1").style.fontSize = "70px";
+        document.getElementById("gameIntro").style.fontSize = "70px";
+        document.getElementById("gameStats").style.fontSize = "70px";
+        document.getElementById("reButton").style.fontSize = "70px";
+      }else{ //電腦螢幕
+        pixwidth  = Math.floor((wh-300)/4)+1;
+        document.getElementById("gameScore1").style.fontSize = "25px" ;
+        document.getElementById("gameIntro").style.fontSize = "25px";
+        document.getElementById("gameStats").style.fontSize = "25px";
+        document.getElementById("reButton").style.fontSize = "25px";
+        console.log(pixwidth);
+      }
+      </script>
+
     </div>
   </div>
 
