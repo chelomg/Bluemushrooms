@@ -1,236 +1,280 @@
-<html>
- <head>
- <title>測測你的記憶力（藍瘦香菇篇）</title>
- <!-- cover by http://www.108js.com/article/article3/30001.html?id=5-->
- <script type="text/javascript">
-   window.onload = function () {
-      var ctx = document.getElementById('canvas').getContext('2d'); 
-      if (window.innerHeight > window.innerWidth){ //手機螢幕
-          ctx.canvas.width  = window.innerWidth;
-          ctx.canvas.height = window.innerWidth+100;  
-          
-      }else{ //電腦螢幕
-          ctx.canvas.width  = window.innerWidth-150;
-          ctx.canvas.height = window.innerHeight-150; 
-
-      }      
-      init();
-   }
- </script>
+<html lang="zh-TW">
+  <head>
+  <title>測測你的記憶力（藍瘦香菇篇）</title>
+  <meta charset="utf-8">
+  <!-- cover by http://www.108js.com/article/article3/30001.html?id=5-->
   <script type="text/javascript">
- function $(id){
-  return document.getElementById(id);
- }
-  var pixwidth;
-  wh = window.innerHeight
-  ww = window.innerWidth
-  if (wh > ww){ //手機螢幕
-    pixwidth  = Math.floor((ww-50)/4)+1;
-  }else{ //電腦螢幕
-    pixwidth  = Math.floor((wh-300)/4)+1;
-    console.log(pixwidth);
-  }
-  console.log((window.innerHeight-300)/4);
-  var backimg= new Image();
-	    backimg.src = "55.jpg";	//扑克牌的背面图片
-  var backgimg= new Image();
-      backgimg.src = "background.jpg"; //扑克牌的背面图片  
-	var cwidth = 760;//canvas的宽和高
-	var cheight = 280;
-	var ctx;
-	var firstpick = true;
-	var firstcard = -1;
-	var secondcard=-1;
-       var sum=0;//记录点击牌的次数
-    
-	var tablecolor = "rgb(255,255,255)";//用这个色清除图片的背面
-	var deck = [];//一副牌，空数组
-	var firstsx = 0;//第一张牌的X坐标
-	var firstsy = 50;//第一张牌的Y坐标
-	var margin = 10;//牌之间的距离
-	var cardwidth = pixwidth;//牌的宽
-	var cardheight = pixwidth;//牌的高
-	var tid;//记时器引用
-	var matched;//两张牌是否匹配
-	var starttime;
-	var count = 0;
-	var pairs = [//二维图片数组
+    window.onload = function () {
+      var ctx = document.getElementById('canvas').getContext('2d'); 
+        if (window.innerHeight > window.innerWidth){ //手機螢幕
+            ctx.canvas.width  = window.innerWidth;
+            ctx.canvas.height = window.innerWidth+100; 
 
-        ["01.png","01-1.png","05.png","05-1.png"],
-        ["02.png","02-1.png","06.png","06-1.png"],
-        ["03.png","03-1.png","07.png","07-1.png"],
-        ["04.png","04-1.png","08.png","08-1.png"],
-	];
-    var uiIntro ;//游戏的玩法
-    var uiStats;//游戏的状态
-    var uiComplete;//游戏结束的信息
-    var uiReset;
-    var uiScore;
-    var uiScore1 
-function Card(sx,sy,swidth,sheight, img, info) {//牌类的构造函数
-	this.sx = sx;
-	this.sy = sy;
-	this.swidth = swidth;
-	this.sheight = sheight;
-	this.info = info;//牌面信息，用于指示是否配对
-	this.img = img;
-	this.draw = drawback;//绘制自己,画牌的背面
-}
-function makedeck() {//创建一副牌
-	var i;
-	var acard;//a牌
-	var bcard;//与a配对的b牌
-	var pica;//a图片
-	var picb;//与a配对的b图片
-	var cx = firstsx;
-	var cy = firstsy;
-	for(i=0;i< pairs.length;i++) {
-     pica = new Image();
-     pica.src = pairs[i][0];
-     acard = new Card(cx,cy,cardwidth,cardheight,pica,i*2);
-     deck.push(acard);
-     picb = new Image();
-     picb.src = pairs[i][1];		
-     bcard = new Card(cx,cy+cardheight+margin,cardwidth,cardheight,picb,i*2);//处于a的下方
-     deck.push(bcard);
-     acard.draw();
-     bcard.draw();
-     //
-     pica = new Image();
-     pica.src = pairs[i][2];
-     acard = new Card(cx,cy+(cardheight+margin)*2,cardwidth,cardheight,pica,i*2+1);
-     deck.push(acard);
-     picb = new Image();
-     picb.src = pairs[i][3];    
-     bcard = new Card(cx,cy+(cardheight+margin)*3,cardwidth,cardheight,picb,i*2+1);//处于a的下方
-     deck.push(bcard);
-     acard.draw();
-     bcard.draw();
-     cx = cx+cardwidth+ margin;
-  }
-	
-}
-function shuffle() {//洗牌
-   var i;
-   var k;
-   var holderinfo;
-   var holderimg;
-   var dl = deck.length
-   var nt;
-   for (nt=0;nt< 3*dl;nt++) {  
-     i = Math.floor(Math.random()*dl);
-     k = Math.floor(Math.random()*dl);
-     holderinfo = deck[i].info;//牌面的信息
-     holderimg = deck[i].img;//牌面的图片
-     deck[i].info = deck[k].info;
-     deck[i].img = deck[k].img;
-     deck[k].info = holderinfo;
-     deck[k].img = holderimg;
-	}
-}
-function drawback() {//画牌的背面
-      ctx.drawImage(backimg,this.sx,this.sy,this.swidth,this.sheight); 
+        }else{ //電腦螢幕
+            ctx.canvas.width  = window.innerHeight-150;
+            ctx.canvas.height = window.innerHeight-150;          
+
+        }      
+        init();
     }
-function choose(ev) {//在桌面上单击时调用
-	var out;
-	var mx;//保存鼠标的X坐标
-	var my;//保存鼠标的Y坐标
-	var pick1;
-	var pick2;
-	if ( ev.layerX ||  ev.layerX == 0) { // Firefox
-        mx= ev.layerX;
-        my = ev.layerY;
-  	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
-        mx = ev.offsetX;
-        my = ev.offsetY;
-  	}
-	var i;
-	for (i=0;i< deck.length;i++){    
-     var card = deck[i];
-     if (card.sx >=0)  //检查鼠标是不是点了这张牌
-      if ((mx>card.sx)&&(mx< card.sx+card.swidth)&&(my>card.sy)&&(my< card.sy+card.sheight)) {
-          if(i==firstcard) return;
-          sum++;   
-          if(sum>=3) return;//点击了同一张牌或者在没有盖住两张翻开的牌时又点击了某张牌    
-          if ((firstpick)|| (i!=firstcard)) {//玩家有没有再次点击同一张牌
-			break;}
+  </script>
+  <script type="text/javascript">
+    function $(id){
+      return document.getElementById(id);
+    }
+    var pixwidth;
+    wh = window.innerHeight
+    ww = window.innerWidth
+    if (wh > ww){ //手機螢幕
+      pixwidth  = Math.floor((ww-50)/4)+1;
+    }else{ //電腦螢幕
+      pixwidth  = Math.floor((wh-300)/4)+1;
+      console.log(pixwidth);
+    }
+    console.log((window.innerHeight-300)/4);
+    var backimg= new Image();
+  	    backimg.src = "201.png";	//撲克牌的背面圖片
+    var backgimg= new Image();
+        backgimg.src = "background.jpg"; //白圖用來蓋掉某些不需要的資訊 
+    var finialx= new Image(); //gmae over 呈現的圖片
+        finialx.src = "34.png"; 
+    var endground= new Image(); //gmae over 呈現的圖片
+        endground.src = "pink_rice.png"; 
+    var backgroundimg = new Image();
+        backgroundimg.src = "grey_wash_wall.png";
+
+  	var cwidth = 760;//canvas的宽和高
+  	var cheight = 280;
+  	var ctx;
+  	var firstpick = true;
+  	var firstcard = -1;
+  	var secondcard=-1;
+         var sum=0;//紀錄點擊牌的次数
+      
+  	var tablecolor = "rgb(255,255,255)";//用這個色清除圖片的背面
+  	var deck = [];//一副牌，空數组
+  	var firstsx = 0;//第一張牌的X坐標
+  	var firstsy = 50;//第一張牌的Y坐標
+  	var margin = 10;//牌之間的距離
+  	var cardwidth = pixwidth;//牌的宽
+  	var cardheight = pixwidth;//牌的高
+  	var tid;//計時器引用
+  	var matched;//兩張牌是否匹配
+  	var starttime;
+  	var count = 0;
+  	var pairs = [//二维圖片数组
+
+          ["01.png","01-1.png","05.png","05-1.png"],
+          //["02.png","02-1.png","06.png","06-1.png"],
+          //["03.png","03-1.png","07.png","07-1.png"],
+          //["04.png","04-1.png","08.png","08-1.png"],
+  	];
+      var uiIntro ;//遊戲的玩法
+      var uiStats;//遊戲的狀態
+      var uiComplete;//遊戲结束的信息
+      var uiReset;
+      var uiScore;
+      var uiScore1 
+    function Card(sx,sy,swidth,sheight, img, info) {//牌類的構造函数
+  	 this.sx = sx;
+  	 this.sy = sy;
+  	 this.swidth = swidth;
+  	 this.sheight = sheight;
+  	 this.info = info;//牌面信息，用於指示是否配對
+  	 this.img = img;
+  	 this.draw = drawback;//繪製自己,畫面的背面
+    }
+    function makedeck() {//創建一副牌
+    	var i;
+    	var acard;//a牌
+    	var bcard;//與a配對的b牌
+    	var pica;//a圖片
+    	var picb;//與a配對的b圖片
+    	var cx = firstsx;
+    	var cy = firstsy;
+    	for(i=0;i< pairs.length;i++) {
+         pica = new Image();
+         pica.src = pairs[i][0];
+         acard = new Card(cx,cy,cardwidth,cardheight,pica,i*2);
+         deck.push(acard);
+         picb = new Image();
+         picb.src = pairs[i][1];		
+         bcard = new Card(cx,cy+cardheight+margin,cardwidth,cardheight,picb,i*2);//處於a的下方
+         deck.push(bcard);
+         acard.draw();
+         bcard.draw();
+         //
+         pica = new Image();
+         pica.src = pairs[i][2];
+         acard = new Card(cx,cy+(cardheight+margin)*2,cardwidth,cardheight,pica,i*2+1);
+         deck.push(acard);
+         picb = new Image();
+         picb.src = pairs[i][3];    
+         bcard = new Card(cx,cy+(cardheight+margin)*3,cardwidth,cardheight,picb,i*2+1);//處於a的下方
+         deck.push(bcard);
+         acard.draw();
+         bcard.draw();
+         cx = cx+cardwidth+ margin;
       }
-	}
-	if (i< deck.length) {  //在i张牌上点击了
-        if (firstpick) {//如果是第一次点击
-          firstcard = i;//第一次点击的牌为i
-          firstpick = false;
-          ctx.drawImage(backgimg,card.sx,card.sy,card.swidth,card.sheight);
-          ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); //翻开牌
-	    }else {
-            secondcard = i;//第二次点击的牌为i
-            ctx.drawImage(backgimg,card.sx,card.sy,card.swidth,card.sheight);
-            ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); //翻开第二张
-             if (card.info==deck[firstcard].info) {//翻开的二张牌如果配对
-                 matched = true;
-                 count++;
-                 uiScore.innerHTML="現在已找到配對數:"+String(count);
-                 if (count>= .5*deck.length) {//所有的牌翻完了
-                   var now = new Date();
-                   var nt = Number(now.getTime());
-                   var seconds = Math.floor(.5+(nt-starttime)/1000); 
-                   var out = "妳的遊戲時間 "+String(seconds)+ " 秒.";
-                    uiScore1.innerHTML=out;
-					uiReset.innerHTML="請重新裝載頁面再玩.";
-                    uiComplete.style.display="";
-                    return;
-                  }
-            }else {//翻开的二张牌不配对
-              matched = false;
+    	
+    }
+    function shuffle() {//洗牌
+       var i;
+       var k;
+       var holderinfo;
+       var holderimg;
+       var dl = deck.length
+       var nt;
+       for (nt=0;nt< 3*dl;nt++) {  
+         i = Math.floor(Math.random()*dl);
+         k = Math.floor(Math.random()*dl);
+         holderinfo = deck[i].info;//牌面的信息
+         holderimg = deck[i].img;//牌面的圖片
+         deck[i].info = deck[k].info;
+         deck[i].img = deck[k].img;
+         deck[k].info = holderinfo;
+         deck[k].img = holderimg;
+    	}
+    }
+    function drawback() {//畫牌的背面
+          ctx.drawImage(backimg,this.sx,this.sy,this.swidth,this.sheight); 
+    }
+    function choose(ev) {//在桌面上單擊時用
+    	var out;
+    	var mx;//保存鼠標的X坐標
+    	var my;//保存鼠標的Y坐標
+    	var pick1;
+    	var pick2;
+    	if ( ev.layerX ||  ev.layerX == 0) { // Firefox
+            mx= ev.layerX;
+            my = ev.layerY;
+      	} else if (ev.offsetX || ev.offsetX == 0) { // Opera
+            mx = ev.offsetX;
+            my = ev.offsetY;
+      	}
+    	var i;
+    	for (i=0;i< deck.length;i++){    
+         var card = deck[i];
+         if (card.sx >=0)  //檢查鼠標是不是點了這張牌
+          if ((mx>card.sx)&&(mx< card.sx+card.swidth)&&(my>card.sy)&&(my< card.sy+card.sheight)) {
+              if(i==firstcard) return;
+              sum++;   
+              if(sum>=3) return;//點擊了同一張牌或者在没有蓋住兩張翻開的牌時又點擊了某張牌    
+              if ((firstpick)|| (i!=firstcard)) {//玩家有没有再次點擊同一張牌
+    			break;}
+          }
+    	}
+    	if (i< deck.length) {  //在i張牌上點擊了
+            if (firstpick) {//如果是第一次點擊
+              firstcard = i;//第一次點擊的牌為i
+              firstpick = false;
+              ctx.drawImage(backgimg,card.sx,card.sy,card.swidth,card.sheight);
+              ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); //翻開牌
+    	      }else {
+                secondcard = i;//第二次點擊的牌為i
+                ctx.drawImage(backgimg,card.sx,card.sy,card.swidth,card.sheight);
+                ctx.drawImage(card.img,card.sx,card.sy,card.swidth,card.sheight); //翻開第二張
+                        if (card.info==deck[firstcard].info) {//翻開的二張牌如果配對
+                                  matched = true;
+                                  count++;
+                                  uiScore.innerHTML=String(count);
+                                  if (count>= .5*deck.length) {//所有的牌翻完了
+                                          var now = new Date();
+                                          var nt = Number(now.getTime());
+                                          var seconds = Math.floor(.5+(nt-starttime)/1000);
+                                          //最後結果顯示
+                                          gameoverset(seconds);
+                                          uiIntro.innerHTML = "<p>更多牙套哥貼圖 <a href='https://store.line.me/stickershop/product/1361178/?ref=Desktop';'>here</a></p>";
+                                          //結束後，背景圖會變，所以字的風格也要修改
+                                          document.getElementById("showscore").style.color = "black";
+                                          document.getElementById("reButton").style.color = "black";
+                                          document.getElementById("gameScore").style.color = "black";
+                        					        //uiReset.innerHTML="請重新裝載頁面再玩.";
+                                          //uiComplete.style.display="";
+                                          return;
+                                  }
+                        }else {//翻開的二張牌不配對
+                          matched = false;
+                        }
+                firstpick = true;
+                tid = setTimeout(flipback,500);//翻開的二張牌不配對时，给玩家一點時間，然後蓋住牌
             }
-            firstpick = true;
-            tid = setTimeout(flipback,800);//翻开的二张牌不配对时，给玩家一点时间，然后盖住牌
-        }
-     }
-}
-function flipback() {
-	var card;
-	if (!matched) {//两张牌不配对时，重绘这两张牌的背面
-	deck[firstcard].draw();
-	deck[secondcard].draw();
-       sum=0;
-       firstcard=-1;
- }
- else {
-  //两张牌配对时，在桌面上清除
-  ctx.fillStyle = tablecolor;
-  ctx.fillRect(deck[secondcard].sx,deck[secondcard].sy,deck[secondcard].swidth,deck[secondcard].sheight+5);
-  ctx.fillRect(deck[firstcard].sx,deck[firstcard].sy,deck[firstcard].swidth,deck[firstcard].sheight+5);
-  deck[secondcard].sx = -1;
-  deck[firstcard].sx = -1;
-  sum=0;
-  firstcard=-1;
-	}
-}
-function init(){
-   ctx = document.getElementById('canvas').getContext('2d'); 
-   canvas1 = document.getElementById('canvas');
-   canvas1.addEventListener('click',choose,false);
-   makedeck();//创建一副牌
-   shuffle();//洗牌
-   ctx.strokeStyle="rgb(255,0,0)";
-   ctx.font="bold 20pt sans-serif";
-   ctx.strokeText("Blue thin mushrooms",150,30);
-   starttime = new Date();
-   starttime = Number(starttime.getTime());
-	 uiIntro = $("gameIntro");
-	 uiStats = $("gameStats");
-	 uiComplete = $("gameComplete");
-	 uiReset = $("gameReset");
-	 uiScore = $("gameScore");
-	 uiScore1 = $("gameScore1");
-       uiComplete.style.display="none";
-  } 
+      }
+    }
+    function flipback() {
+    	var card;
+    	if (!matched) {//兩張牌不配對时，重繪這兩張牌的背面
+            //因為png檔，邊邊透明會看上一個畫的圖（牌的正面），所以我們必須先畫一層底圖來防止這件事
+            ctx.drawImage(backgroundimg,deck[firstcard].sx,deck[firstcard].sy,deck[firstcard].swidth,deck[firstcard].sheight)
+            ctx.drawImage(backgroundimg,deck[secondcard].sx,deck[secondcard].sy,deck[secondcard].swidth,deck[secondcard].sheight)
+          	deck[firstcard].draw();
+          	deck[secondcard].draw();
+            sum=0;
+            firstcard=-1;
+      }
+      else {
+            //两張牌配對时，在桌面上清除
+
+            //註解這三行是因為排翻完我不要讓他從檯面上消失
+            //ctx.fillStyle = tablecolor;
+            //ctx.fillRect(deck[secondcard].sx,deck[secondcard].sy,deck[secondcard].swidth,deck[secondcard].sheight+5);
+            //ctx.fillRect(deck[firstcard].sx,deck[firstcard].sy,deck[firstcard].swidth,deck[firstcard].sheight+5);
+            
+            deck[secondcard].sx = -1;
+            deck[firstcard].sx = -1;
+            sum=0;
+            firstcard=-1;
+      }
+    }
+    function init(){
+       ctx = document.getElementById('canvas').getContext('2d'); 
+       canvas1 = document.getElementById('canvas');
+       canvas1.addEventListener('click',choose,false);
+       makedeck();//創建一副牌
+       shuffle();//洗牌
+       document.body.style.backgroundImage = "url('grey_wash_wall.png')";  //我的底圖（背景圖）
+       ctx.strokeStyle="rgb(255,0,0)";
+       ctx.font="bold 20pt sans-serif";
+       //ctx.strokeText("Blue thin mushrooms",150,30); 加標題
+       starttime = new Date();
+       starttime = Number(starttime.getTime());
+    	 uiIntro = $("gameIntro");
+    	 uiStats = $("gameStats");
+    	 uiComplete = $("gameComplete");
+    	 uiReset = $("gameReset");
+    	 uiScore = $("gameScore");
+    	 uiScore1 = $("gameScore1");
+           uiComplete.style.display="none";
+    } 
+    function gameoverset(seconds){
+      if (window.innerHeight > window.innerWidth){ //手機螢幕
+        ctx.canvas.width  = window.innerWidth;
+        ctx.canvas.height = window.innerWidth+100;
+        document.body.style.backgroundImage = "url('pink_rice.png')";
+        ctx.drawImage(endground,0,0,document.getElementById('canvas').width,document.getElementById('canvas').height);//結束把上面牌全部清空
+        ctx.drawImage(finialx,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*3/10,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*2/5,document.getElementById('canvas').height*3/5,document.getElementById('canvas').height*3/5);
+        ctx.font = "90px Arial";
+        ctx.fillText("遊戲結束！",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4); 
+      
+        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4+100); 
+      
+      }else{ //電腦螢幕
+        ctx.canvas.width  = window.innerHeight-150;
+        ctx.canvas.height = window.innerHeight-150;
+        document.body.style.backgroundImage = "url('pink_rice.png')";
+        ctx.drawImage(endground,0,0,document.getElementById('canvas').width,document.getElementById('canvas').height);//結束把上面牌全部清空          
+        ctx.drawImage(finialx,document.getElementById('canvas').width*2/7+70-document.getElementById('canvas').height*3/5/2,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*2/5,document.getElementById('canvas').height*3/5,document.getElementById('canvas').height*3/5);
+        ctx.font = "35px Arial";
+        ctx.fillText("遊戲結束！",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5); 
+        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5+40);           
+      } 
+
+    }
   </script>
   <style type="text/css">
-  #game{
-    position:relative;
-  }
+    #game{
+      position:relative;
+    }
 
   </style>
  </head>
@@ -243,12 +287,11 @@ function init(){
   <div id="game"  >
     <div id="gameUI">
       <div id="gameIntro">
-        <p >玩法：點擊桌面上的兩張牌，找出所有配對的牌.</p>
+        <p style="color: white;">點擊牙套哥，找出配對的貼圖</p>
       </div>
 
       <div id="gameStats">
-        <p><span id="gameScore" >已找到配對：0</span> 對 <button id="reButton" onclick="myFunction()" >Reload page</button></p>
-
+        <p id="showscore" style="color: white;">已找到：<span id="gameScore" style="color:yellow;"> 0 </span> 組貼圖 <button id="reButton" onclick="myFunction()" style="color: black;border: 2px solid black; ">Reload page</button></p>
       </div>
       
 
@@ -262,24 +305,23 @@ function init(){
         <h1>遊戲結束!</h1>
         <p><span id="gameScore1" ></span> </p>
         <p><a id="gameReset" onclick="init();" href="" style="font-size: large">再玩一次</a></p>
-      </div>
+      </div> 
 
       <script type="text/javascript">
       wh = window.innerHeight
       ww = window.innerWidth
       if (wh > ww){ //手機螢幕
         pixwidth  = Math.floor((ww-50)/4)+1;
-        document.getElementById("gameScore1").style.fontSize = "70px";
-        document.getElementById("gameIntro").style.fontSize = "70px";
-        document.getElementById("gameStats").style.fontSize = "70px";
-        document.getElementById("reButton").style.fontSize = "70px";
+        document.getElementById("gameScore1").style.fontSize = "60px";
+        document.getElementById("gameIntro").style.fontSize = "60px";
+        document.getElementById("gameStats").style.fontSize = "60px";
+        document.getElementById("reButton").style.fontSize = "60px";
       }else{ //電腦螢幕
         pixwidth  = Math.floor((wh-300)/4)+1;
         document.getElementById("gameScore1").style.fontSize = "25px" ;
         document.getElementById("gameIntro").style.fontSize = "25px";
         document.getElementById("gameStats").style.fontSize = "25px";
         document.getElementById("reButton").style.fontSize = "25px";
-        console.log(pixwidth);
       }
       </script>
 
