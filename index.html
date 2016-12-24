@@ -1,4 +1,12 @@
 <html lang="zh-TW">
+  <style>
+    @font-face {
+    font-family: 'wakan';
+    src: url('fonts/TpldKhangXiDictTrial.otf') format('truetype');
+    unicode-range: U+5927, U+5BB6, U+5FEB, U+4F86, U+627E, U+FF0C, U+4E00, U+6A23, U+7684, U+7259, U+5957, U+54E5, U+54E5, U+5728, U+54EA, U+88E1, U+5DF2, U+627E, U+5230, U+FF1A, U+7D44, U+8CBC, U+5716, U+66F4, U+591A, U+5169, U+500B,U+56C9, U+FF01 ;
+    }
+    p {font-family: 'wakan',serif;}
+  </style>
   <head>
   <title>測測你的記憶力（藍瘦香菇篇）</title>
   <meta charset="utf-8">
@@ -33,7 +41,7 @@
     }
     console.log((window.innerHeight-300)/4);
     var backimg= new Image();
-  	    backimg.src = "201.png";	//撲克牌的背面圖片
+  	    backimg.src = "frontcover.jpg";	//撲克牌的背面圖片
     var backgimg= new Image();
         backgimg.src = "background.jpg"; //白圖用來蓋掉某些不需要的資訊 
     var finialx= new Image(); //gmae over 呈現的圖片
@@ -41,7 +49,7 @@
     var endground= new Image(); //gmae over 呈現的圖片
         endground.src = "pink_rice.png"; 
     var backgroundimg = new Image();
-        backgroundimg.src = "grey_wash_wall.png";
+        backgroundimg.src = "backgroundcolor.jpg";
 
   	var cwidth = 760;//canvas的宽和高
   	var cheight = 280;
@@ -182,6 +190,10 @@
                                           var now = new Date();
                                           var nt = Number(now.getTime());
                                           var seconds = Math.floor(.5+(nt-starttime)/1000);
+                                          //記錄分數用
+                                          if(localStorage.getItem("bluemushroom_score") == null||localStorage.getItem("bluemushroom_score") > seconds){
+                                            localStorage.setItem("bluemushroom_score", seconds);
+                                          }
                                           //最後結果顯示
                                           gameoverset(seconds);
                                           uiIntro.innerHTML = "<p>更多牙套哥貼圖 <a href='https://store.line.me/stickershop/product/1361178/?ref=Desktop';'>here</a></p>";
@@ -232,7 +244,7 @@
        canvas1.addEventListener('click',choose,false);
        makedeck();//創建一副牌
        shuffle();//洗牌
-       document.body.style.backgroundImage = "url('grey_wash_wall.png')";  //我的底圖（背景圖）
+       document.body.style.backgroundImage = "url('backgroundcolor.jpg')";  //我的底圖（背景圖）
        ctx.strokeStyle="rgb(255,0,0)";
        ctx.font="bold 20pt sans-serif";
        //ctx.strokeText("Blue thin mushrooms",150,30); 加標題
@@ -254,9 +266,9 @@
         ctx.drawImage(endground,0,0,document.getElementById('canvas').width,document.getElementById('canvas').height);//結束把上面牌全部清空
         ctx.drawImage(finialx,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*3/10,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*2/5,document.getElementById('canvas').height*3/5,document.getElementById('canvas').height*3/5);
         ctx.font = "90px Arial";
-        ctx.fillText("遊戲結束！",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4); 
-      
-        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4+100); 
+        ctx.fillText("遊戲結束！",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4);     
+        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4+100);
+        ctx.fillText("最佳 "+String(localStorage.getItem("bluemushroom_score"))+" 秒",document.getElementById('canvas').width*1/2-225,document.getElementById('canvas').height*3/4+200); 
       
       }else{ //電腦螢幕
         ctx.canvas.width  = window.innerHeight-150;
@@ -266,7 +278,8 @@
         ctx.drawImage(finialx,document.getElementById('canvas').width*2/7+70-document.getElementById('canvas').height*3/5/2,document.getElementById('canvas').width*1/2-document.getElementById('canvas').height*2/5,document.getElementById('canvas').height*3/5,document.getElementById('canvas').height*3/5);
         ctx.font = "35px Arial";
         ctx.fillText("遊戲結束！",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5); 
-        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5+40);           
+        ctx.fillText("時間 "+String(seconds)+" 秒",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5+40);
+        ctx.fillText("時間 "+String(localStorage.getItem("bluemushroom_score"))+" 秒",document.getElementById('canvas').width*2/7,document.getElementById('canvas').height*4/5+80);
       } 
 
     }
@@ -274,6 +287,9 @@
   <style type="text/css">
     #game{
       position:relative;
+    }
+    a{
+      font-family: Microsoft JhengHei;
     }
 
   </style>
@@ -287,11 +303,14 @@
   <div id="game"  >
     <div id="gameUI">
       <div id="gameIntro">
-        <p style="color: white;">點擊牙套哥，找出配對的貼圖</p>
+        <p style="color: black;" class = "wakan">大家快來找，一樣的牙套哥哥在哪裡</p>
       </div>
 
       <div id="gameStats">
-        <p id="showscore" style="color: white;">已找到：<span id="gameScore" style="color:yellow;"> 0 </span> 組貼圖 <button id="reButton" onclick="myFunction()" style="color: black;border: 2px solid black; ">Reload page</button></p>
+        <p id="showscore" style="color: black;" class = "wakan">已經找到 
+          <span id="gameScore" style="color:black; font-family: Microsoft JhengHei;" class = "wakan">0</span> 組一樣的牙套哥哥囉！
+          <button id="reButton" onclick="myFunction()" style="color: black; border: 2px solid black; font-family: Microsoft JhengHei;">Reload page</button>
+        </p>
       </div>
       
 
