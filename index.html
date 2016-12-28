@@ -341,6 +341,7 @@
       ww = window.innerWidth-16;   // 扣16 = body.Width
       console.log(wh);
       console.log(ww);
+      alert("高"+wh+"寬"+ww);
       var ctx = document.getElementById('canvas').getContext('2d'); 
       //顯示字體大小
       if (wh > ww){ //手機螢幕
@@ -352,7 +353,7 @@
         document.getElementById("gameStats").style.fontSize = "60px";
         document.getElementById("reButton").style.fontSize = "60px";
 
-        
+      
       }else{ //電腦螢幕
         pixwidth  = Math.floor((wh*3/4-50)/4);      
         //將遊戲移至中央 
@@ -362,6 +363,7 @@
         document.getElementById("gameStats").style.fontSize = "25px";
         document.getElementById("reButton").style.fontSize = "25px";
       }
+
       </script>
 
     </div>
