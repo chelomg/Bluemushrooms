@@ -6,7 +6,7 @@
     unicode-range: U+5927, U+5BB6, U+5FEB, U+4F86, U+627E, U+FF0C, U+4E00, U+6A23, U+7684, U+7259, U+5957, U+54E5, U+54E5, U+5728, U+54EA, U+88E1, U+5DF2, U+627E, U+5230, U+FF1A, U+7D44, U+8CBC, U+5716, U+66F4, U+591A, U+5169, U+500B,U+56C9, U+FF01, U+518D, U+73A9, U+6B21, U+904A, U+6232, U+7D50, U+675F, U+FF01, U+6642, U+9593,U+6700, U+4F73,U+79D2 ;
     }
     p {font-family: 'wakan',serif;}
-    #reButton {font-family: 'wakan',serif;}
+    #reButton {font-family: 'wakan',serif; }
   </style>
   <head>
   <title>測測你的記憶力（藍瘦香菇篇）</title>
@@ -38,10 +38,10 @@
       if(wh*3/5 > ww){ //一般手機螢幕
         pixwidth =  Math.floor((ww-50)/4)+1;
       }else{ //ipad
-        pixwidth =  Math.floor((wh*3/5-100)/4);
+        pixwidth =  Math.floor((wh*3/5-50)/4);
       }
     }else{ //電腦螢幕
-        pixwidth = Math.floor((wh*3/5-50)/4);
+        pixwidth = Math.floor((wh*3/4-50)/4);
     }
     var backimg= new Image();
   	    backimg.src = "frontcover.jpg";	//撲克牌的背面圖片
@@ -65,7 +65,7 @@
   	var tablecolor = "rgb(255,255,255)";//用這個色清除圖片的背面
   	var deck = [];//一副牌，空數组
   	var firstsx = 0;//第一張牌的X坐標
-  	var firstsy = 50;//第一張牌的Y坐標
+  	var firstsy = 10;//第一張牌的Y坐標
   	var margin = 10;//牌之間的距離
   	var cardwidth = pixwidth;//牌的宽
   	var cardheight = pixwidth;//牌的高
@@ -304,6 +304,9 @@
     div{ 
       text-align: center;  
     }
+    #reButton:hover {
+      background-color: rgb(255,192,0); 
+    }
 
   </style>
  </head>
@@ -326,7 +329,7 @@
           <span id="gameScore" style="color:black; font-family: Microsoft JhengHei;" class = "wakan">0</span> 組一樣的牙套哥哥囉！
           
         </p>
-        <button id="reButton" class = "wakan" onclick="myFunction()" style="color: black; border: 2px solid black;">再玩一次</button>
+        <button id="reButton" class = "wakan" onclick="myFunction()" style="color: black; border: 2px solid black;padding: 14px 40px;">再玩一次</button>
       </div>
       
 
@@ -354,7 +357,7 @@
           document.getElementById("reButton").style.fontSize = "60px";
 
         }else{ //ipad
-          pixwidth =  Math.floor((wh*3/5-100)/4);
+          pixwidth =  Math.floor((wh*3/5-50)/4);
           //調整圖的位置，置中
           document.getElementById('canvas').style.marginLeft=(document.body.offsetWidth-(pixwidth)*4-30)/2;
           document.getElementById("gameScore").style.fontSize = "25px" ;
@@ -364,7 +367,7 @@
         }
         
       }else{ //電腦螢幕
-        pixwidth  = Math.floor((wh*3/5-50)/4);      
+        pixwidth  = Math.floor((wh*3/4-50)/4);      
         //將遊戲移至中央 
         document.getElementById('canvas').style.marginLeft=(document.body.offsetWidth-(pixwidth)*4-30)/2;
         document.getElementById("gameScore").style.fontSize = "25px" ;
