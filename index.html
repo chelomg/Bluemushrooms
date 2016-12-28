@@ -17,7 +17,7 @@
       var ctx = document.getElementById('canvas').getContext('2d'); 
         if (window.innerHeight > window.innerWidth){ //手機螢幕 canvas 寬,高 
             ctx.canvas.width  = document.body.offsetWidth;
-            ctx.canvas.height = document.body.offsetHeight*4/5; 
+            ctx.canvas.height = document.body.offsetWidth; 
 
         }else{ //電腦螢幕 canvas 寬,高
             ctx.canvas.width  = document.body.offsetWidth;
