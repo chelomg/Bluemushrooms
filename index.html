@@ -17,11 +17,19 @@
       var ctx = document.getElementById('canvas').getContext('2d'); 
         if (window.innerHeight > window.innerWidth){ //手機螢幕 canvas 寬,高 
             ctx.canvas.width  = document.body.offsetWidth;
-            ctx.canvas.height = document.body.offsetWidth; 
+            ctx.canvas.height = document.body.offsetWidth;
+            document.getElementById("gameScore").style.fontSize = "60px";
+            document.getElementById("gameIntro").style.fontSize = "60px";
+            document.getElementById("gameStats").style.fontSize = "60px";
+            document.getElementById("reButton").style.fontSize = "60px"; 
 
         }else{ //電腦螢幕 canvas 寬,高
             ctx.canvas.width  = document.body.offsetWidth;
-            ctx.canvas.height = document.body.offsetHeight*3/4;        
+            ctx.canvas.height = document.body.offsetHeight*3/4;
+            document.getElementById("gameScore").style.fontSize = "25px" ;
+            document.getElementById("gameIntro").style.fontSize = "25px";
+            document.getElementById("gameStats").style.fontSize = "25px";
+            document.getElementById("reButton").style.fontSize = "25px";        
         }      
         init();
     }
