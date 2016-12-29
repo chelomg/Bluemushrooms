@@ -18,6 +18,7 @@
         if (window.innerHeight > window.innerWidth){ //手機螢幕 canvas 寬,高 
             ctx.canvas.width  = document.body.offsetWidth;
             ctx.canvas.height = document.body.offsetWidth;
+            init();
             document.getElementById("gameScore").style.fontSize = "60px";
             document.getElementById("gameIntro").style.fontSize = "60px";
             document.getElementById("gameStats").style.fontSize = "60px";
@@ -26,12 +27,13 @@
         }else{ //電腦螢幕 canvas 寬,高
             ctx.canvas.width  = document.body.offsetWidth;
             ctx.canvas.height = document.body.offsetHeight*3/4;
+            init();
             document.getElementById("gameScore").style.fontSize = "25px" ;
             document.getElementById("gameIntro").style.fontSize = "25px";
             document.getElementById("gameStats").style.fontSize = "25px";
             document.getElementById("reButton").style.fontSize = "25px";        
         }      
-        init();
+        
     }
   </script>
   <script type="text/javascript">
