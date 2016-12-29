@@ -73,9 +73,9 @@
   	var pairs = [//二维圖片数组
 
           ["01.png","01-1.png","05.png","05-1.png"],
-          ["02.png","02-1.png","06.png","06-1.png"],
-          ["03.png","03-1.png","07.png","07-1.png"],
-          ["04.png","04-1.png","08.png","08-1.png"],
+          //["02.png","02-1.png","06.png","06-1.png"],
+          //["03.png","03-1.png","07.png","07-1.png"],
+          //["04.png","04-1.png","08.png","08-1.png"],
   	];
       var uiIntro ;//遊戲的玩法
       var uiStats;//遊戲的狀態
@@ -195,10 +195,12 @@
                                           //最後結果顯示
                                           gameoverset(seconds);
                                           uiIntro.innerHTML = "<p>更多牙套哥貼圖 <a href='https://store.line.me/stickershop/product/1361178/?ref=Desktop';'>here</a></p>";
+                                          //結束清空已找到幾組貼圖這行敘述
+                                          uiShowScore.innerHTML = "";
                                           //結束後，背景圖會變，所以字的風格也要修改
                                           document.getElementById("showscore").style.color = "black";
                                           document.getElementById("reButton").style.color = "black";
-                                          document.getElementById("gameScore").style.color = "black";
+                                          //document.getElementById("gameScore").style.color = "black";
                                           return;
                                   }
                         }else {//翻開的二張牌不配對
@@ -242,7 +244,7 @@
        shuffle();//洗牌
        document.body.style.backgroundImage = "url('backgroundcolor.jpg')";  //我的底圖（背景圖）
        ctx.strokeStyle="rgb(255,0,0)";
-       ctx.font="bold 20pt sans-serif";
+       //ctx.font="bold 20pt sans-serif";
        //ctx.strokeText("Blue thin mushrooms",150,30); 加標題
        starttime = new Date();
        starttime = Number(starttime.getTime());
@@ -250,6 +252,7 @@
     	 uiStats = $("gameStats");
     	 uiScore = $("gameScore");
     	 uiScore1 = $("gameScore1");
+       uiShowScore = $("showscore");
     } 
     //遊戲結束的顯示
     function gameoverset(seconds){
@@ -341,7 +344,7 @@
       ww = window.innerWidth-16;   // 扣16 = body.Width
       console.log(wh);
       console.log(ww);
-      alert("高"+wh+"寬"+ww);
+      //alert("高"+wh+"寬"+ww);
       var ctx = document.getElementById('canvas').getContext('2d'); 
       //顯示字體大小
       if (wh > ww){ //手機螢幕
